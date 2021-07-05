@@ -6,15 +6,44 @@
     <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
     <title></title>
   </head>
+  <style>
+    .toolbar {
+      background-color: #abd7eb;
+    }
+
+    .webix_secondary .webix_button {
+      background-color: #abd7eb;
+      border: 1px solid black;
+      color: rgb(50,50,50);
+    }
+  </style>
   <body>
-    <a href="src/sortingAlgorithms.html">Sorting</a>
     <script type="text/javascript" charset="utf-8">
-      var button = { view:"button", id:"algoPageButton", value:"Sorting Algorithms", width:100, align:"center", on:{  onItemClick:function(id, event){
-                                                                                                          //window.open("/src/sortingAlgorithms.html", "_self");
-                                                                                                          // window.location.pathname = "sortingAlgorithms.html"
-                                                                                                        }
-                                                                                                      } 
-                                                                                                    };
+      var toolbar = {
+        view:"toolbar",
+        id:"toolbar",
+        css:"toolbar",
+        //height:79,
+        cols:[
+          {},
+          { view:"menu", autowidth:true, data:[
+              { id:"codingProjectsMenu", value:"Coding projects", submenu:[
+                { id:"sortingAlgorithmsSubMenu", value:"Visualizing sorting algorithms", href:"src/sortingAlgorithms.html" }
+                ]
+              },
+            ] 
+          },
+          { view:"menu", autowidth:true, data:[
+              { id:"socialMediaMenu", value:"Social Media", submenu:[
+                { id:"instagramSubMenu", value:"Instagram", href:"https://www.instagram.com/zachzirkle/", target:"_blank" },
+                { id:"youtubeSubMenu", value:"YouTube", href:"https://www.youtube.com/channel/UCNAbH-iv7OKP_Xxt2RN2MeQ", target:"_blank" },
+                ]
+              },
+            ] 
+          },
+          {}
+        ]
+      }
       
       webix.ui({
         view: "scrollview",
@@ -23,7 +52,7 @@
         autoheight: true,
         body:{
           rows:[
-            button
+            toolbar
           ]
         }
       })

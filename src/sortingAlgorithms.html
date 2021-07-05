@@ -8,13 +8,15 @@
   </head>
   <style>
     .toolbar {
-      background-color: white;
+      background-color: #abd7eb;
     }
 
     .webix_secondary .webix_button {
       background-color: #abd7eb;
+      border: 1px solid gray;
       color: rgb(50,50,50);
     }
+
   </style>
   <body>
     <script type="text/javascript" charset="utf-8">
@@ -23,7 +25,8 @@
       var testArray = [];
       var ptr1 = 0;
       var ptr2 = 0;
-      var pauseBoolean = false;
+      var arraySize = 50;
+      var sortingSpeed = 1;
       
       function randomizeArray(size)
       {
@@ -55,7 +58,6 @@
 
       function bubbleSort() {
         setTimeout(function() {
-          console.log("hi")
           if (ptr1 < testArray.length-1)
           {
             if (ptr2 < testArray.length-1)
@@ -74,10 +76,9 @@
             $$("graph").clearAll(),
             $$("graph").define("data", dataObject); 
             $$("graph").refresh();
-            if(pauseBoolean == false)
-              bubbleSort()
+            bubbleSort()
           }
-        }, 1)
+        }, sortingSpeed)
       }
 
       function sleep(ms) {
@@ -89,15 +90,21 @@
         id:"toolbar",
         css:"toolbar",
         cols:[
-          {},
-          { view:"button", id:"generateArrayButton", value:"Generate Array", autowidth:true, align:"center", click:function(id, event){ 
-                                                                                                                      generateArray(50);
-                                                                                                                      $$("graph").clearAll(),
-                                                                                                                      $$("graph").define("data", dataObject); 
-                                                                                                                      $$("graph").refresh(); 
-                                                                                                                    } },
-          {},
+        {},
+        { view:"button", id:"generateArrayButton", value:"Generate Array", autowidth:true, align:"center", click:function(id, event){ 
+                                                                                                                    generateArray(arraySize);
+                                                                                                                    $$("graph").clearAll(),
+                                                                                                                    $$("graph").define("data", dataObject); 
+                                                                                                                    $$("graph").refresh(); 
+                                                                                                                  } },
+        { rows:[{view:"label", label:"Array size", align:"center"}, { view:"slider", id:"arraySizeSlider", value:50, min:10, max: 100, on:{
+                                                                                                                                            onSliderDrag:function(){
+                                                                                                                                              arraySize = this.getValue()
+                                                                                                                                            }
+        } },] },
         { view:"button", id:"bubbleSortButton", value:"Bubble Sort", width:100, align:"center", on:{  onItemClick:function(id, event){
+                                                                                                          ptr1 = 0;
+                                                                                                          ptr2 = 0;
                                                                                                           bubbleSort();
                                                                                                         }
                                                                                                       }
@@ -105,33 +112,20 @@
         { view:"button", id:"quickSortButton", value:"Quick Sort", width:100, align:"center" },
         { view:"button", id:"mergeSortButton", value:"Merge Sort", width:100, align:"center" },
         { view:"button", id:"heapSortButton", value:"Heap Sort", width:100, align:"center" },
-        {},
+        { rows:[{view:"label", label:"Sorting speed delay", align:"center"}, { view:"slider", id:"sortingSpeedSlider", value:1, min:1, max: 100, on:{
+                                                                                                                                                      onSliderDrag:function(){
+                                                                                                                                                        sortingSpeed = this.getValue()
+                                                                                                                                                      }
+        } },] },
         {
           view:"button", 
-          id:"pauseButton", 
-          value:"Pause", 
+          id:"homebutton", 
+          value:"Home page", 
           width:130, 
           align:"center", 
           on:{
             onItemClick:function(id, event){
-              pauseBoolean = true;
-              $$("pauseButton").hide();
-              $$("resumeButton").show();
-            }
-          }
-        },
-        {
-          view:"button", 
-          id:"resumeButton", 
-          value:"Resume", 
-          width:130, 
-          align:"center",
-          hidden:true,
-          on:{
-            onItemClick:function(id, event){
-              pauseBoolean = false;
-              $$("resumeButton").hide();
-              $$("pauseButton").show();
+              window.open("../index.html", "_self");
             }
           }
         },
@@ -149,8 +143,8 @@
         color:function(obj){
           if(obj.id == ptr2)
             return "#000000"
-          if(obj.id == ptr1)
-            return "#123456"
+          //if(obj.id == ptr1)
+          //  return "#123456"
           return "#f6960a"
         },
         data: dataObject
