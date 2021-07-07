@@ -8,32 +8,42 @@
   </head>
   <style>
     .toolbar {
-      background-color: #abd7eb;
+      background-color: rgba(171,215,235,1.0)
     }
 
-    .webix_secondary .webix_button {
-      background-color: #abd7eb;
-      border: 1px solid black;
-      color: rgb(50,50,50);
+    .toolbarMenus {
+      text-align: center;
+    }
+
+    .bg {
+      background-image: url("https://langate.com/wp-content/uploads/2020/12/code-refactoring.jpg");
+
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 100%;
+    }
+
+    .blogPosts {
+      background: rgba(255,255,255,0.9);
     }
   </style>
   <body>
     <script type="text/javascript" charset="utf-8">
+
       var toolbar = {
         view:"toolbar",
         id:"toolbar",
         css:"toolbar",
-        //height:79,
         cols:[
           {},
-          { view:"menu", autowidth:true, data:[
+          { view:"menu", autowidth:true, css:"toolbarMenus", data:[
               { id:"codingProjectsMenu", value:"Coding projects", submenu:[
                 { id:"sortingAlgorithmsSubMenu", value:"Visualizing sorting algorithms", href:"src/sortingAlgorithms.html" }
                 ]
               },
             ] 
           },
-          { view:"menu", autowidth:true, data:[
+          { view:"menu", autowidth:true, css:"toolbarMenus", data:[
               { id:"socialMediaMenu", value:"Social Media", submenu:[
                 { id:"instagramSubMenu", value:"Instagram", href:"https://www.instagram.com/zachzirkle/", target:"_blank" },
                 { id:"youtubeSubMenu", value:"YouTube", href:"https://www.youtube.com/channel/UCNAbH-iv7OKP_Xxt2RN2MeQ", target:"_blank" },
@@ -44,15 +54,32 @@
           {}
         ]
       }
+
+      var blogPosts = {
+        view:"template",
+        template:'<iframe src="https://www.w3.org/TR/PNG/iso_8859-1.txt" style="background: rgba(255,255,255,0.9); width: 100%; height: 97%"></iframe>',
+        css:"blogPosts",
+        borderless:true
+      }
       
       webix.ui({
         view: "scrollview",
         scroll: "y",
         autowidth: true,
         autoheight: true,
+        css:"bg",
         body:{
           rows:[
-            toolbar
+            toolbar,
+            {},
+            {
+              cols:[
+                {},
+                blogPosts,
+                {}
+              ]
+            },
+            {}
           ]
         }
       })
