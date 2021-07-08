@@ -21,23 +21,28 @@
   <body>
     <script type="text/javascript" charset="utf-8">
 
-      var dataObject = [];
-      var testArray = [];
-      var ptr1 = 0;
-      var ptr2 = 0;
-      var arraySize = 50;
-      var sortingSpeed = 1;
+      var dataObject = []//The elements of the test array must be placed into objects to be used by the Webix chart, this variable holds those objects
+      var testArray = []//The array to be sorted
+      var ptr1 = 0
+      var ptr2 = 0
+      var arraySize = 50
+      var sortingSpeed = 1
       
-      function randomizeArray(size)
-      {
-          testArray = []
-          for(i = 0; i < size; i++)
-          {
-            testArray.push(Math.floor(Math.random() * size + 1))
-          }
+      /*
+       * Clear the test array and then add <size> number of random integers into the array
+      */
+      function randomizeArray(size) {
+        testArray = []
+        for(i = 0; i < size; i++)
+        {
+          testArray.push(Math.floor(Math.random() * size + 1))
+        }
       }
 
-      function fillDataObjectWithArray(){
+      /*
+       * Fill the object array with the values from the test array
+      */
+      function fillDataObjectWithArray() {
         dataObject = []
         for(i = 0; i < testArray.length; i++)
         {
@@ -45,25 +50,38 @@
         }
       }
 
-      function generateArray(size){
+      /*
+       * Randomize the test array and then fill the object array
+      */
+      function generateArray(size) {
         randomizeArray(size);
         fillDataObjectWithArray();
       }
 
+      /*
+       * Helper function for swapping elements in the array to be sorted
+      */
       function swap(n1, n2) {
         var temp = testArray[n1];
         testArray[n1] = testArray[n2];
         testArray[n2] = temp;
       }
 
+      /*
+       * Helper function to pause execution to allow visualization of the array sorting
+      */
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      /*
+       * Bubble sort function
+      */
       function bubbleSort() {
         setTimeout(function() {
-          if (ptr1 < testArray.length-1)
-          {
-            if (ptr2 < testArray.length-1)
-            {
-              if (testArray[ptr2] > testArray[ptr2+1])
-              {
+          if (ptr1 < testArray.length-1) {
+            if (ptr2 < testArray.length-1) {
+              if (testArray[ptr2] > testArray[ptr2+1]) {
                 swap(ptr2,ptr2+1);
               }
               ptr2++;
@@ -72,17 +90,82 @@
               ptr1++;
               ptr2 = 0;
             }
-            fillDataObjectWithArray();
-            $$("graph").clearAll(),
-            $$("graph").define("data", dataObject); 
-            $$("graph").refresh();
+            fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
             bubbleSort()
           }
         }, sortingSpeed)
       }
 
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+      /*
+       * Quick sort function
+      */
+      function quickSort() {
+
+      }
+
+      /*
+       * Merge sort function
+      */
+      function mergeSort() {
+
+      }
+
+      /*
+       * Heap sort function
+      */
+      function heapSort() {
+        setTimeout(function() {
+
+          if(ptr1 > 0) {
+            swap(0, ptr1)
+
+            heapify(ptr1, 0)
+
+            fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
+            heapSort()
+
+            ptr1--
+          }
+        }, sortingSpeed)
+      }
+
+      /*
+       * Initialize the heap, this is normally part of the heapSort function itself but for visualization purposes it is put into its own function
+      */
+      function heapSortInitialize() {
+
+        //This for loop builds the heap
+        for(var i = Math.floor(testArray.length / 2) - 1; i >=0; i--) {
+          heapify(testArray.length, i)
+        }
+      }
+
+      function heapify(n, root) {
+        var largest = root //Initialize the root
+        var left = 2 * root + 1 //
+        var right = 2 * root + 2
+
+        // If left child is larger than root
+        if (left < n && testArray[left] > testArray[largest])
+            largest = left
+ 
+        // If right child is larger than largest so far
+        if (right < n && testArray[right] > testArray[largest])
+            largest = right
+ 
+        // If largest is not root
+        if (largest != root) {
+            swap(root, largest)
+ 
+            // Recursively heapify the affected sub-tree
+            heapify(n, largest)
+        }
       }
     
       var toolbar = {
@@ -91,29 +174,47 @@
         css:"toolbar",
         cols:[
         {},
-        { view:"button", id:"generateArrayButton", value:"Generate Array", autowidth:true, align:"center", click:function(id, event){ 
-                                                                                                                    generateArray(arraySize);
-                                                                                                                    $$("graph").clearAll(),
-                                                                                                                    $$("graph").define("data", dataObject); 
-                                                                                                                    $$("graph").refresh(); 
-                                                                                                                  } },
-        { rows:[{view:"label", label:"Array size", align:"center"}, { view:"slider", id:"arraySizeSlider", value:50, min:10, max: 100, on:{
-                                                                                                                                            onSliderDrag:function(){
+        { view:"button", id:"generateArrayButton", value:"Generate Array", autowidth:true, align:"center", click:function(id, event) { 
+                                                                                                                    generateArray(arraySize)
+                                                                                                                    $$("graph").clearAll()
+                                                                                                                    $$("graph").define("data", dataObject)
+                                                                                                                    $$("graph").refresh()
+                                                                                                                  } 
+                                                                                                                },
+        { rows:[{view:"label", label:"Array size", align:"center"}, { view:"slider", id:"arraySizeSlider", value:50, min:10, max: 100, on:{ onSliderDrag:function() {
                                                                                                                                               arraySize = this.getValue()
                                                                                                                                             }
         } },] },
-        { view:"button", id:"bubbleSortButton", value:"Bubble Sort", width:100, align:"center", on:{  onItemClick:function(id, event){
-                                                                                                          ptr1 = 0;
-                                                                                                          ptr2 = 0;
-                                                                                                          bubbleSort();
+        { view:"button", id:"bubbleSortButton", value:"Bubble Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
+                                                                                                          ptr1 = 0
+                                                                                                          ptr2 = 0
+                                                                                                          bubbleSort()
                                                                                                         }
                                                                                                       }
                                                                                                     },
-        { view:"button", id:"quickSortButton", value:"Quick Sort", width:100, align:"center" },
-        { view:"button", id:"mergeSortButton", value:"Merge Sort", width:100, align:"center" },
-        { view:"button", id:"heapSortButton", value:"Heap Sort", width:100, align:"center" },
-        { rows:[{view:"label", label:"Sorting speed delay", align:"center"}, { view:"slider", id:"sortingSpeedSlider", value:1, min:1, max: 100, on:{
-                                                                                                                                                      onSliderDrag:function(){
+        { view:"button", id:"quickSortButton", value:"Quick Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
+                                                                                                          ptr1 = 0
+                                                                                                          ptr2 = 0
+                                                                                                          quickSort()
+                                                                                                        }
+                                                                                                      } 
+                                                                                                    },
+        { view:"button", id:"mergeSortButton", value:"Merge Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
+                                                                                                          ptr1 = 0
+                                                                                                          ptr2 = 0
+                                                                                                          mergeSort()
+                                                                                                        }
+                                                                                                      } 
+                                                                                                    },
+        { view:"button", id:"heapSortButton", value:"Heap Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
+                                                                                                          ptr1 = testArray.length - 1
+                                                                                                          ptr2 = 0
+                                                                                                          heapSortInitialize()
+                                                                                                          heapSort()
+                                                                                                        }
+                                                                                                      } 
+                                                                                                    },
+        { rows:[{view:"label", label:"Sorting speed delay", align:"center"}, { view:"slider", id:"sortingSpeedSlider", value:1, min:1, max: 100, on:{ onSliderDrag:function() {
                                                                                                                                                         sortingSpeed = this.getValue()
                                                                                                                                                       }
         } },] },
@@ -124,8 +225,8 @@
           width:130, 
           align:"center", 
           on:{
-            onItemClick:function(id, event){
-              window.open("../index.html", "_self");
+            onItemClick:function(id, event) {
+              window.open("../index.html", "_self")
             }
           }
         },
@@ -140,7 +241,7 @@
         width: 100,
         autoheight:true,
         value:"#value#",
-        color:function(obj){
+        color:function(obj) {
           if(obj.id == ptr2)
             return "#000000"
           //if(obj.id == ptr1)
@@ -149,8 +250,6 @@
         },
         data: dataObject
       };
-
-
 
       webix.ui({
         view: "scrollview",
