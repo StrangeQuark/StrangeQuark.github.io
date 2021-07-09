@@ -102,8 +102,62 @@
       /*
        * Quick sort function
       */
-      function quickSort() {
+      function quickSort(low, high) {
+          if(low < high) {
+            var i = partition(low, high)
 
+            quickSort(low, i - 1)
+            quickSort(i + 1, high)
+          }
+      }
+
+      /*
+       * 
+      */
+      function partition(low, high) {
+        var pivot = testArray[high]
+        var i = low - 1
+        var j = low
+
+        // for(j = low; j <= high; j++) {
+        //   if(testArray[j] < pivot) {
+        //     i++
+        //     swap(i, j)
+        //   }
+        // }
+        
+        // swap(i + 1, high)
+        i = visualizePartition(low, high, i, j, pivot)
+
+        return i + 1
+      }
+
+      function visualizePartition(low, high, i, j, pivot) {
+        for(j = low; j <= high; j++) {
+          if(testArray[j] < pivot) {
+            i++
+            swap(i, j)
+          }
+        }
+
+        // setTimeout(function() {
+        //   if (j <= high) {
+        //     if(testArray[j] < pivot) {
+        //       i++
+        //       swap(i, j)
+        //     }
+        //     fillDataObjectWithArray()
+        //     $$("graph").clearAll()
+        //     $$("graph").define("data", dataObject)
+        //     $$("graph").refresh()
+        //     j++
+        //     visualizePartition(low, high, i, j, pivot)
+        //   }
+        // }, sortingSpeed)
+        
+        swap(i + 1, high)
+
+        return i
       }
 
       /*
@@ -146,6 +200,9 @@
         }
       }
 
+      /*
+       *
+      */
       function heapify(n, root) {
         var largest = root //Initialize the root
         var left = 2 * root + 1 //
@@ -163,8 +220,8 @@
         if (largest != root) {
             swap(root, largest)
  
-            // Recursively heapify the affected sub-tree
-            heapify(n, largest)
+        // Recursively heapify the affected sub-tree
+        heapify(n, largest)
         }
       }
     
@@ -184,7 +241,10 @@
         { rows:[{view:"label", label:"Array size", align:"center"}, { view:"slider", id:"arraySizeSlider", value:50, min:10, max: 100, on:{ onSliderDrag:function() {
                                                                                                                                               arraySize = this.getValue()
                                                                                                                                             }
-        } },] },
+                                                                                                                                          }
+                                                                                                                                        },
+                                                                                                                                      ]
+                                                                                                                                    },
         { view:"button", id:"bubbleSortButton", value:"Bubble Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
                                                                                                           ptr1 = 0
                                                                                                           ptr2 = 0
@@ -195,7 +255,11 @@
         { view:"button", id:"quickSortButton", value:"Quick Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
                                                                                                           ptr1 = 0
                                                                                                           ptr2 = 0
-                                                                                                          quickSort()
+                                                                                                          quickSort(0, testArray.length - 1)
+                                                                                                          fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
                                                                                                         }
                                                                                                       } 
                                                                                                     },
