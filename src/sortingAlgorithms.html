@@ -163,8 +163,77 @@
       /*
        * Merge sort function
       */
-      function mergeSort() {
+      function mergeSort(left, right){
+        //setTimeout(function() {
+          if(left < right) {
+            var middle = left + parseInt((right - left) / 2);
+            fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
+            mergeSort(left, middle);
+            mergeSort(middle + 1, right);
+            merge(left, middle, right);
+          }
+        //}, sortingSpeed)
+      }
 
+      /*
+       *
+      */
+      function merge(left, middle, right)
+      {
+        var n1 = middle - left + 1;
+        var n2 = right - middle;
+    
+        // Create temp arrays
+        var L = new Array(n1);
+        var R = new Array(n2);
+    
+        // Copy data to temp arrays L[] and R[]
+        for (var i = 0; i < n1; i++)
+          L[i] = testArray[left + i];
+        for (var j = 0; j < n2; j++)
+          R[j] = testArray[middle + 1 + j];
+    
+        // Merge the temp arrays back into arr[l..r]
+    
+        // Initial index of first subarray
+        var i = 0;
+    
+        // Initial index of second subarray
+        var j = 0;
+    
+        // Initial index of merged subarray
+        var k = left;
+    
+        while (i < n1 && j < n2) {
+          if (L[i] <= R[j]) {
+            testArray[k] = L[i];
+              i++;
+          }
+          else {
+            testArray[k] = R[j];
+              j++;
+          }
+          k++;
+        }
+    
+        // Copy the remaining elements of
+        // L[], if there are any
+        while (i < n1) {
+          testArray[k] = L[i];
+          i++;
+          k++;
+        }
+    
+        // Copy the remaining elements of
+        // R[], if there are any
+        while (j < n2) {
+          testArray[k] = R[j];
+          j++;
+          k++;
+        }
       }
 
       /*
@@ -266,7 +335,11 @@
         { view:"button", id:"mergeSortButton", value:"Merge Sort", width:100, align:"center", on:{ onItemClick:function(id, event) {
                                                                                                           ptr1 = 0
                                                                                                           ptr2 = 0
-                                                                                                          mergeSort()
+                                                                                                          mergeSort(0, testArray.length - 1)
+                                                                                                          fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
                                                                                                         }
                                                                                                       } 
                                                                                                     },
