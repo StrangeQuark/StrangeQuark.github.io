@@ -133,27 +133,27 @@
       }
 
       function visualizePartition(low, high, i, j, pivot) {
-        for(j = low; j <= high; j++) {
-          if(testArray[j] < pivot) {
-            i++
-            swap(i, j)
-          }
-        }
-
-        // setTimeout(function() {
-        //   if (j <= high) {
-        //     if(testArray[j] < pivot) {
-        //       i++
-        //       swap(i, j)
-        //     }
-        //     fillDataObjectWithArray()
-        //     $$("graph").clearAll()
-        //     $$("graph").define("data", dataObject)
-        //     $$("graph").refresh()
-        //     j++
-        //     visualizePartition(low, high, i, j, pivot)
+        // for(j = low; j <= high; j++) {
+        //   if(testArray[j] < pivot) {
+        //     i++
+        //     swap(i, j)
         //   }
-        // }, sortingSpeed)
+        // }
+
+        //setTimeout(function() {
+          if (j <= high) {
+            if(testArray[j] < pivot) {
+              i++
+              swap(i, j)
+            }
+            fillDataObjectWithArray()
+            $$("graph").clearAll()
+            $$("graph").define("data", dataObject)
+            $$("graph").refresh()
+            j++
+            visualizePartition(low, high, i, j, pivot)
+          }
+        //}, sortingSpeed)
         
         swap(i + 1, high)
 
